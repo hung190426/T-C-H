@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ôn thi Python &amp; NumPy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#eef1f5; --grid:rgba(36,70,200,.07); --surface:#fbfcfe; --text:#14213d; --muted:#5d6883; --border:#d3d9e6;
+  --accent:#2446c8; --accent-soft:#e3e9fb; --on-accent:#fff;
+  --ok:#137a45; --ok-bg:#e0f4e8; --warn:#8f5200; --warn-bg:#fff0d2; --err:#b3261e; --err-bg:#fde7e5;
+  --code-bg:#161b2b; --code-text:#e6e9f5; --code-muted:#7f88a8;
+  --sans:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1320; --grid:rgba(124,147,255,.07); --surface:#171c2e; --text:#e7eaf5; --muted:#98a1bd; --border:#2a3148;
+    --accent:#8ba0ff; --accent-soft:#232b52; --on-accent:#0d1120;
+    --ok:#4ade80; --ok-bg:#12291d; --warn:#fbbf24; --warn-bg:#2b230f; --err:#ff8a80; --err-bg:#2e1a1c;
+    --code-bg:#0b0e18; --code-text:#e6e9f5; --code-muted:#7f88a8;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1320; --grid:rgba(124,147,255,.07); --surface:#171c2e; --text:#e7eaf5; --muted:#98a1bd; --border:#2a3148;
+  --accent:#8ba0ff; --accent-soft:#232b52; --on-accent:#0d1120;
+  --ok:#4ade80; --ok-bg:#12291d; --warn:#fbbf24; --warn-bg:#2b230f; --err:#ff8a80; --err-bg:#2e1a1c;
+  --code-bg:#0b0e18; --code-text:#e6e9f5; --code-muted:#7f88a8;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0; min-height:100%; padding-bottom:84px; color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.6;
+  background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+button{font-family:inherit;color:inherit}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+.wrap{max-width:760px;margin:0 auto;padding:16px 18px 28px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--border)}
+.top-in{max-width:760px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:12px}
+.brand{font-weight:700;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+.brand span{font-family:var(--mono);font-weight:500;color:var(--accent)}
+.prog{flex:1;min-width:0}
+.prog-t{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.prog-b{height:5px;background:var(--border);border-radius:3px;margin-top:3px;overflow:hidden}
+.prog-b i{display:block;height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+.theme{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:transparent;font-size:17px;cursor:pointer}
+
+/* tabs */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs button{flex:1;border:0;background:transparent;padding:10px 4px 9px;font-size:13px;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;border-top:3px solid transparent}
+.tabs button b{font-size:19px;font-weight:400;line-height:1.2}
+.tabs button.on{color:var(--accent);border-top-color:var(--accent);font-weight:600}
+
+/* text */
+h2.h{font-size:22px;line-height:1.25;letter-spacing:-.01em;margin:6px 0 4px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+p{margin:0 0 10px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{min-height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--border);background:var(--surface);font-size:14px;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.lbl{font-size:13px;color:var(--muted);margin-top:12px}
+
+/* exercise list */
+.list{margin-top:8px;border-top:1px solid var(--border)}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--border);padding:14px 2px;cursor:pointer;min-height:64px}
+.row:active{background:var(--accent-soft)}
+.pips{display:flex;gap:3px;flex:none}
+.pips i{width:8px;height:22px;border-radius:2px;background:var(--border)}
+.pips.p1 i:nth-child(-n+1),.pips.p2 i:nth-child(-n+2),.pips.p3 i:nth-child(-n+3){background:var(--accent)}
+.pips.p3 i:nth-child(-n+3){background:var(--err)}
+.pips.p2 i:nth-child(-n+2){background:var(--warn)}
+.pips.p1 i:nth-child(-n+1){background:var(--ok)}
+.rt{flex:1;min-width:0}
+.rt b{display:block;font-weight:600;font-size:16px;line-height:1.35}
+.rt small{color:var(--muted);font-size:13px}
+.st{flex:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
+.st.done{background:var(--ok-bg);color:var(--ok);font-weight:700}
+.st.seen{border:1px dashed var(--border)}
+
+/* detail */
+.bar{display:flex;justify-content:space-between;margin-bottom:6px}
+.ghost{background:transparent;border:0;color:var(--accent);font-size:15px;font-weight:600;padding:8px 2px;min-height:40px;cursor:pointer}
+.meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.meta .pips i{height:14px}
+.desc{margin:6px 0 14px}
+.exp{margin-bottom:14px}
+.exp>span{font-size:13px;color:var(--muted)}
+pre{margin:0;font-family:var(--mono)}
+.exp pre{margin-top:4px;padding:10px 12px;background:var(--surface);border:1px dashed var(--border);border-radius:8px;font-size:14px;overflow-x:auto;white-space:pre}
+.editor{display:flex;background:var(--code-bg);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.gutter{flex:none;padding:12px 8px 12px 10px;text-align:right;color:var(--code-muted);font:16px/24px var(--mono);min-width:36px;background:rgba(255,255,255,.04);user-select:none}
+.gutter span{display:block}
+.gutter span.e{color:#ff8a80;font-weight:700;background:rgba(255,90,80,.2);margin-left:-10px;padding-left:10px;margin-right:-8px;padding-right:8px}
+#ed{flex:1;min-width:0;background:transparent;color:var(--code-text);caret-color:#8ba0ff;border:0;outline:0;resize:none;padding:12px 12px 16px;font:16px/24px var(--mono);white-space:pre;overflow-x:auto;overflow-y:hidden;tab-size:4;min-height:200px}
+.editor:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.btn{min-height:46px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:15px;cursor:pointer;padding:0 8px}
+.btn.primary{grid-column:1/-1;background:var(--accent);color:var(--on-accent);border-color:transparent;font-weight:700;font-size:16px}
+.btn:active{transform:translateY(1px)}
+.msg{border-radius:10px;padding:12px 14px;margin-top:12px;border-left:5px solid;background:var(--surface)}
+.msg h4{margin:0 0 6px;font-size:16px}
+.msg ul{margin:0;padding-left:20px}
+.msg li{margin:4px 0}
+.msg.err{border-color:var(--err);background:var(--err-bg)} .msg.err h4{color:var(--err)}
+.msg.warn{border-color:var(--warn);background:var(--warn-bg)} .msg.warn h4{color:var(--warn)}
+.msg.ok{border-color:var(--ok);background:var(--ok-bg)} .msg.ok h4{color:var(--ok)}
+.msg.info{border-color:var(--accent);background:var(--accent-soft)} .msg.info h4{color:var(--accent)}
+.tag{font-family:var(--mono);font-size:12px;font-weight:700;margin-right:4px}
+pre.code{background:var(--code-bg);color:var(--code-text);padding:12px 14px;border-radius:10px;overflow-x:auto;font-size:14px;line-height:1.6;margin:8px 0 12px;white-space:pre}
+pre.code code{background:none;padding:0;font-size:inherit;color:inherit}
+.cm{color:var(--code-muted)} .kw{color:#ff9ac1} .str{color:#a5e075} .num{color:#f0c674}
+.foot{font-size:12.5px;color:var(--muted);margin-top:16px}
+
+/* learn */
+details.sec{border-bottom:1px solid var(--border)}
+details.sec summary{list-style:none;cursor:pointer;padding:14px 2px;display:flex;align-items:center;gap:10px;font-weight:600;min-height:56px}
+details.sec summary::-webkit-details-marker{display:none}
+details.sec summary::after{content:"+";margin-left:auto;font-family:var(--mono);color:var(--accent);font-size:20px}
+details.sec[open] summary::after{content:"–"}
+.tg{font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:9px;border:1px solid var(--border);color:var(--muted);font-weight:500}
+.sec-b{padding:0 2px 12px}
+.sec-b ul{padding-left:20px;margin:0 0 10px}
+.sec-b li{margin:6px 0}
+
+/* cheat */
+.search{width:100%;min-height:46px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0 14px;font:16px var(--sans);margin-top:6px}
+.search:focus{outline:2px solid var(--accent);outline-offset:1px}
+.ch{padding:12px 2px;border-bottom:1px solid var(--border)}
+.ch .cmd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ch .cmd code{font-size:14.5px;font-weight:700;background:none;padding:0;color:var(--accent)}
+.ch .mn{margin:2px 0 4px}
+.ch .ex{font-family:var(--mono);font-size:13px;background:var(--code-bg);color:var(--code-text);border-radius:6px;padding:6px 10px;overflow-x:auto;white-space:pre}
+.count{font-size:13px;color:var(--muted);margin:8px 0 0}
+@media (min-width:700px){.actions{grid-template-columns:2fr 1fr 1fr 1fr}.btn.primary{grid-column:auto}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand">Ôn thi <span>py+np</span></div>
+  <div class="prog"><div class="prog-t"><span id="pt">Đã giải 0/0</span><span id="pp">0%</span></div><div class="prog-b"><i id="pb" style="width:0%"></i></div></div>
+  <button class="theme" id="theme" aria-label="Đổi giao diện sáng/tối">◐</button>
+</div></header>
+<main id="app"></main>
+<nav class="tabs" aria-label="Điều hướng">
+  <button data-tab="practice" class="on"><b>✎</b>Luyện tập</button>
+  <button data-tab="learn"><b>❏</b>Kiến thức</button>
+  <button data-tab="cheat"><b>⌘</b>Lệnh hay dùng</button>
+</nav>
+
+<script>
+"use strict";
+/* ============ Tiện ích ============ */
+const T = s => s.replace(/^\n/, "").replace(/\s+$/, "");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const norm = s => s.replace(/\s+/g," ").trim();
+const LV = {1:"Dễ", 2:"Trung bình", 3:"Khó"};
+const TP = {py:"Python", np:"NumPy"};
+const msgHTML = s => esc(s).replace(/`([^`]+)`/g,"<code>$1</code>");
+
+function hl(code){
+  const KW = "def|return|if|elif|else|for|while|in|import|as|from|and|or|not|True|False|None|lambda|break|continue|class|pass|try|except|is";
+  const re = new RegExp("(#.*$)|(\"[^\"]*\"|'[^']*')|\\b("+KW+")\\b|\\b(\\d+\\.?\\d*)\\b","g");
+  return code.split("\n").map(line => esc(line).replace(re,(m,c,s,k,n)=>{
+    if(c) return '<span class="cm">'+c+'</span>';
+    if(s) return '<span class="str">'+s+'</span>';
+    if(k) return '<span class="kw">'+k+'</span>';
+    return '<span class="num">'+n+'</span>';
+  })).join("\n");
+}
+
+/* ============ Danh sách bài tập ============ */
+const P = [
+/* ---------- PYTHON ---------- */
+{id:"py1", topic:"py", level:1, title:"Tổng hai số",
+ desc:"Cho <code>a = 5</code> và <code>b = 7</code>. Tính tổng hai số, lưu vào biến <code>tong</code> rồi in ra màn hình.",
+ starter:T(`
+a = 5
+b = 7
+# Viết code ở đây
+`),
+ solution:T(`
+a = 5
+b = 7
+tong = a + b
+print(tong)
+`),
+ expected:"12",
+ hint:"Dùng toán tử + để cộng a và b, gán vào biến tong, rồi print(tong).",
+ explain:"Biến được tạo khi gán giá trị. print() in giá trị ra màn hình.",
+ must:[
+  {re:/\btong\s*=/, msg:"Cần lưu kết quả vào biến `tong`."},
+  {re:/\+/, msg:"Tính tổng bằng toán tử `+`."}
+ ]},
+
+{id:"py2", topic:"py", level:1, title:"Số chẵn hay số lẻ",
+ desc:"Cho <code>n = 10</code>. In ra <code>Chẵn</code> nếu n là số chẵn, ngược lại in <code>Lẻ</code>.",
+ starter:T(`
+n = 10
+# Viết code ở đây
+`),
+ solution:T(`
+n = 10
+if n % 2 == 0:
+    print("Chẵn")
+else:
+    print("Lẻ")
+`),
+ expected:"Chẵn",
+ hint:"Số chẵn chia hết cho 2, tức là n % 2 == 0. Nhớ dấu hai chấm sau if/else và thụt lề 4 dấu cách.",
+ explain:"Toán tử % lấy phần dư. So sánh bằng dùng ==, còn = là phép gán.",
+ must:[
+  {re:/%\s*2/, msg:"Dùng `n % 2` để lấy số dư khi chia cho 2."},
+  {re:/\bif\b/, msg:"Cần câu lệnh `if` để kiểm tra điều kiện."},
+  {re:/\belse\b/, msg:"Cần nhánh `else` cho trường hợp số lẻ."},
+  {re:/Chẵn/, msg:"Chưa in đúng chữ `Chẵn`."},
+  {re:/Lẻ/, msg:"Chưa in đúng chữ `Lẻ`."}
+ ]},
+
+{id:"py3", topic:"py", level:1, title:"Tổng các số từ 1 đến n",
+ desc:"Cho <code>n = 100</code>. Dùng vòng lặp để tính tổng các số nguyên từ 1 đến n (gồm cả n) rồi in ra.",
+ starter:T(`
+n = 100
+tong = 0
+# Viết vòng lặp ở đây
+`),
+ solution:T(`
+n = 100
+tong = 0
+for i in range(1, n + 1):
+    tong += i
+print(tong)
+`),
+ expected:"5050",
+ hint:"Dùng for i in range(1, n + 1) và cộng dồn vào tong. range không lấy cận trên.",
+ explain:"range(1, n + 1) sinh các số 1, 2, ..., n. Cận trên trong range luôn bị loại trừ.",
+ must:[
+  {re:/\brange\s*\(/, msg:"Dùng `range(...)` để sinh dãy số."},
+  {re:/\bfor\b|\bsum\s*\(/, msg:"Cần vòng lặp `for` (hoặc hàm `sum`) để cộng dồn."}
+ ],
+ forbid:[
+  {re:/range\s*\(\s*1\s*,\s*n\s*\)/, msg:"`range(1, n)` dừng ở n - 1 nên thiếu số n. Dùng `range(1, n + 1)`."},
+  {re:/range\s*\(\s*n\s*\)/, msg:"`range(n)` chạy từ 0 đến n - 1. Muốn 1..n phải dùng `range(1, n + 1)`."}
+ ]},
+
+{id:"py4", topic:"py", level:1, title:"Đảo ngược chuỗi",
+ desc:"Cho <code>s = \"python\"</code>. In ra chuỗi đảo ngược.",
+ starter:T(`
+s = "python"
+# Viết code ở đây
+`),
+ solution:T(`
+s = "python"
+print(s[::-1])
+`),
+ expected:"nohtyp",
+ hint:"Cắt chuỗi với bước -1: s[::-1].",
+ explain:"Cú pháp cắt lát là s[bắt_đầu:kết_thúc:bước]. Bước -1 đi ngược từ cuối về đầu.",
+ must:[
+  {re:/\[\s*:\s*:\s*-1\s*\]|reversed\s*\(/, msg:"Đảo chuỗi bằng cắt lát `s[::-1]` (hoặc `reversed`)."}
+ ]},
+
+{id:"py5", topic:"py", level:2, title:"Hàm tính giai thừa",
+ desc:"Viết hàm <code>giai_thua(n)</code> trả về n! (ví dụ 5! = 120). Sau đó in <code>giai_thua(5)</code>.",
+ starter:T(`
+def giai_thua(n):
+    # Viết code ở đây
+    pass
+
+print(giai_thua(5))
+`),
+ solution:T(`
+def giai_thua(n):
+    kq = 1
+    for i in range(2, n + 1):
+        kq *= i
+    return kq
+
+print(giai_thua(5))
+`),
+ expected:"120",
+ hint:"Khởi tạo kq = 1, nhân dần kq *= i với i từ 2 đến n, cuối cùng return kq.",
+ explain:"Giai thừa là tích 1·2·...·n. Bắt đầu từ 1 (phần tử đơn vị của phép nhân). Hàm cần return để trả kết quả về.",
+ must:[
+  {re:/def\s+giai_thua\s*\(\s*n\s*\)/, msg:"Hàm phải tên `giai_thua` và nhận tham số `n`."},
+  {re:/\breturn\b/, msg:"Hàm cần `return` kết quả (không chỉ print bên trong hàm)."},
+  {re:/\bfor\b|\bwhile\b|giai_thua\s*\(\s*n\s*-\s*1/, msg:"Cần vòng lặp (hoặc đệ quy) để nhân dần."},
+  {re:/giai_thua\s*\(\s*5\s*\)/, msg:"Nhớ gọi `giai_thua(5)` ở cuối."}
+ ],
+ forbid:[
+  {re:/\b(kq|ket_qua|result|res|tich|gt|s)\s*=\s*0\b[\s\S]*\*=/, msg:"Khởi tạo tích bằng 0 thì nhân gì cũng ra 0. Hãy bắt đầu từ 1."}
+ ]},
+
+{id:"py6", topic:"py", level:2, title:"List comprehension: bình phương số chẵn",
+ desc:"Dùng list comprehension tạo list <code>kq</code> gồm bình phương của các số chẵn từ 1 đến 10, rồi in ra.",
+ starter:T(`
+# Bình phương các số chẵn từ 1 đến 10
+kq = 
+print(kq)
+`),
+ solution:T(`
+kq = [x ** 2 for x in range(1, 11) if x % 2 == 0]
+print(kq)
+`),
+ expected:"[4, 16, 36, 64, 100]",
+ hint:"Cú pháp: [biểu_thức for x in dãy if điều_kiện]. Số chẵn: x % 2 == 0.",
+ explain:"List comprehension gộp vòng lặp, điều kiện và biểu thức trong một dòng.",
+ must:[
+  {re:/\[[\s\S]*\bfor\b[\s\S]*\bin\b[\s\S]*\]/, msg:"Dùng list comprehension: `[... for x in ... if ...]`."},
+  {re:/\*\*\s*2|\bpow\s*\(|\bx\s*\*\s*x/, msg:"Bình phương bằng `x ** 2`."},
+  {re:/%\s*2/, msg:"Lọc số chẵn bằng `x % 2 == 0`."}
+ ],
+ forbid:[
+  {re:/range\s*\(\s*1\s*,\s*10\s*\)/, msg:"`range(1, 10)` không gồm 10 nên thiếu 10² = 100. Dùng `range(1, 11)`."}
+ ]},
+
+{id:"py7", topic:"py", level:2, title:"Đếm số lần xuất hiện của từ",
+ desc:"Cho <code>s = \"a b a c b a\"</code>. Dùng dict đếm số lần xuất hiện của mỗi từ và in dict đó.",
+ starter:T(`
+s = "a b a c b a"
+dem = {}
+# Viết code ở đây
+`),
+ solution:T(`
+s = "a b a c b a"
+dem = {}
+for tu in s.split():
+    dem[tu] = dem.get(tu, 0) + 1
+print(dem)
+`),
+ expected:"{'a': 3, 'b': 2, 'c': 1}",
+ hint:"Tách chuỗi bằng s.split(), duyệt từng từ và cập nhật: dem[tu] = dem.get(tu, 0) + 1.",
+ explain:"dict.get(khoá, mặc_định) tránh KeyError khi khoá chưa tồn tại.",
+ must:[
+  {re:/\.split\s*\(/, msg:"Tách chuỗi thành các từ bằng `s.split()`."},
+  {re:/\bfor\b/, msg:"Cần vòng lặp `for` duyệt qua từng từ."},
+  {re:/\{\s*\}|\bdict\s*\(|Counter|defaultdict/, msg:"Dùng dict để lưu số đếm."}
+ ],
+ forbid:[
+  {re:/\w+\s*\[\s*\w+\s*\]\s*\+=\s*1/, unless:/defaultdict|Counter|\.get\s*\(|setdefault|\bin\s+dem\b|\bnot\s+in\b/, msg:"`dem[tu] += 1` gây `KeyError` ở lần đầu gặp từ mới. Dùng `dem.get(tu, 0) + 1` hoặc kiểm tra `if tu in dem`."}
+ ]},
+
+{id:"py8", topic:"py", level:2, title:"Kiểm tra số nguyên tố",
+ desc:"Viết hàm <code>is_prime(n)</code> trả về <code>True</code> nếu n là số nguyên tố, ngược lại <code>False</code>. In <code>is_prime(17)</code> và <code>is_prime(18)</code>.",
+ starter:T(`
+def is_prime(n):
+    # Viết code ở đây
+    pass
+
+print(is_prime(17), is_prime(18))
+`),
+ solution:T(`
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+print(is_prime(17), is_prime(18))
+`),
+ expected:"True False",
+ hint:"n < 2 không phải số nguyên tố. Thử chia cho i từ 2 đến căn bậc hai của n; chia hết thì return False.",
+ explain:"Chỉ cần kiểm tra ước đến √n vì ước lớn hơn luôn đi cùng một ước nhỏ hơn.",
+ must:[
+  {re:/def\s+is_prime\s*\(\s*n\s*\)/, msg:"Hàm phải tên `is_prime` và nhận tham số `n`."},
+  {re:/return\s+False/, msg:"Cần `return False` khi tìm thấy ước."},
+  {re:/return\s+True/, msg:"Cần `return True` khi không có ước nào."},
+  {re:/%/, msg:"Kiểm tra chia hết bằng toán tử `%`."},
+  {re:/\bfor\b|\bwhile\b/, msg:"Cần vòng lặp để thử các ước."},
+  {re:/<\s*2|<=\s*1|==\s*1\b/, msg:"Chưa xử lý n < 2 (0 và 1 không phải số nguyên tố)."}
+ ]},
+
+{id:"py9", topic:"py", level:3, title:"Dãy Fibonacci",
+ desc:"Tạo list <code>fib</code> gồm n số Fibonacci đầu tiên với <code>n = 10</code> (bắt đầu 0, 1, 1, 2, ...) rồi in ra.",
+ starter:T(`
+n = 10
+fib = [0, 1]
+# Viết code ở đây
+`),
+ solution:T(`
+n = 10
+fib = [0, 1]
+while len(fib) < n:
+    fib.append(fib[-1] + fib[-2])
+print(fib)
+`),
+ expected:"[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]",
+ hint:"Lặp đến khi len(fib) == n, mỗi lần append(fib[-1] + fib[-2]).",
+ explain:"fib[-1] và fib[-2] là hai phần tử cuối. Mỗi số mới bằng tổng hai số liền trước.",
+ must:[
+  {re:/\bfor\b|\bwhile\b/, msg:"Cần vòng lặp để sinh dãy."},
+  {re:/\.append\s*\(|\.extend\s*\(|\+=|fib\s*=\s*fib\s*\+/, msg:"Cần thêm phần tử mới vào list (ví dụ `fib.append(...)`)."},
+  {re:/\[\s*-\s*1\s*\]|\[\s*-\s*2\s*\]|\[\s*i\s*-\s*1\s*\]|\[\s*i\s*-\s*2\s*\]|\bwhile\b/, msg:"Phần tử mới = tổng hai phần tử liền trước (`fib[-1] + fib[-2]`)."}
+ ]},
+
+{id:"py10", topic:"py", level:3, title:"Chuỗi đối xứng (palindrome)",
+ desc:"Cho <code>s = \"A man a plan a canal Panama\"</code>. Kiểm tra s có phải chuỗi đối xứng không (bỏ qua khoảng trắng và phân biệt hoa thường) rồi in <code>True</code>/<code>False</code>.",
+ starter:T(`
+s = "A man a plan a canal Panama"
+# Viết code ở đây
+`),
+ solution:T(`
+s = "A man a plan a canal Panama"
+t = s.replace(" ", "").lower()
+print(t == t[::-1])
+`),
+ expected:"True",
+ hint:"Chuẩn hoá bằng .replace(\" \", \"\").lower() rồi so sánh t với t[::-1].",
+ explain:"So sánh chuỗi với chính nó đảo ngược. Phải chuẩn hoá hoa/thường và khoảng trắng trước.",
+ must:[
+  {re:/\.lower\s*\(|\.upper\s*\(|\.casefold\s*\(/, msg:"Cần đưa về cùng kiểu chữ (`.lower()`) để bỏ qua hoa/thường."},
+  {re:/\.replace\s*\(|\.join\s*\(|\.split\s*\(/, msg:"Cần bỏ khoảng trắng (ví dụ `.replace(\" \", \"\")`)."},
+  {re:/\[\s*:\s*:\s*-1\s*\]|reversed\s*\(/, msg:"Cần so sánh với bản đảo ngược `[::-1]`."}
+ ]},
+
+{id:"py11", topic:"py", level:3, title:"Sắp xếp danh sách dict",
+ desc:"Cho danh sách sinh viên. Sắp xếp theo điểm giảm dần và in từng dòng dạng <code>tên điểm</code>.",
+ starter:T(`
+sv = [
+    {"ten": "An", "diem": 8.5},
+    {"ten": "Bình", "diem": 9.0},
+    {"ten": "Chi", "diem": 7.0},
+]
+# Viết code ở đây
+`),
+ solution:T(`
+sv = [
+    {"ten": "An", "diem": 8.5},
+    {"ten": "Bình", "diem": 9.0},
+    {"ten": "Chi", "diem": 7.0},
+]
+kq = sorted(sv, key=lambda x: x["diem"], reverse=True)
+for s in kq:
+    print(s["ten"], s["diem"])
+`),
+ expected:"Bình 9.0\nAn 8.5\nChi 7.0",
+ hint:"sorted(sv, key=lambda x: x[\"diem\"], reverse=True).",
+ explain:"Tham số key nhận một hàm, trả về giá trị dùng để so sánh. reverse=True cho thứ tự giảm dần.",
+ must:[
+  {re:/sorted\s*\(|\.sort\s*\(/, msg:"Dùng `sorted(...)` hoặc `.sort(...)`."},
+  {re:/key\s*=/, msg:"Cần tham số `key=` để chọn khoá sắp xếp."},
+  {re:/lambda/, msg:"Dùng `lambda x: x[\"diem\"]` làm hàm khoá."},
+  {re:/reverse\s*=\s*True|-\s*\w+\s*\[/, msg:"Sắp xếp giảm dần: thêm `reverse=True`."}
+ ],
+ forbid:[
+  {re:/key\s*=\s*(?!lambda)[A-Za-z_]\w*\s*\[/, msg:"`key` phải là một hàm (`lambda x: x[\"diem\"]`), không phải một giá trị."}
+ ]},
+
+/* ---------- NUMPY ---------- */
+{id:"np1", topic:"np", level:1, title:"Tạo mảng và xem shape",
+ desc:"Tạo mảng 1 chiều <code>a</code> gồm 1, 2, 3, 4, 5 và in kích thước (<code>shape</code>) của nó.",
+ starter:T(`
+import numpy as np
+
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+a = np.array([1, 2, 3, 4, 5])
+print(a.shape)
+`),
+ expected:"(5,)",
+ hint:"np.array nhận MỘT list: np.array([1, 2, 3, 4, 5]). Kích thước là thuộc tính a.shape (không có ngoặc tròn).",
+ explain:"shape là tuple các kích thước theo từng chiều. Mảng 1 chiều có 5 phần tử → (5,).",
+ must:[
+  {re:/np\.array\s*\(/, msg:"Tạo mảng bằng `np.array(...)`."},
+  {re:/\.shape\b|np\.shape\s*\(/, msg:"In kích thước bằng `a.shape`."}
+ ],
+ forbid:[
+  {re:/np\.array\s*\(\s*\d+\s*,/, msg:"`np.array(1, 2, ...)` sai: phải truyền một list `np.array([1, 2, 3, 4, 5])`."},
+  {re:/\.shape\s*\(/, msg:"`shape` là thuộc tính, không phải hàm: viết `a.shape` (không có `()`)."}
+ ]},
+
+{id:"np2", topic:"np", level:1, title:"Tổng và trung bình",
+ desc:"Tạo mảng <code>a</code> gồm các số nguyên từ 1 đến 10. In ra tổng và giá trị trung bình.",
+ starter:T(`
+import numpy as np
+
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+a = np.arange(1, 11)
+print(a.sum(), a.mean())
+`),
+ expected:"55 5.5",
+ hint:"np.arange(1, 11) tạo 1..10. Dùng a.sum() và a.mean().",
+ explain:"np.arange(bắt_đầu, kết_thúc, bước) không gồm điểm kết thúc, giống range.",
+ must:[
+  {re:/np\.arange\s*\(|np\.array\s*\(/, msg:"Tạo mảng bằng `np.arange(...)`."},
+  {re:/\.sum\s*\(|np\.sum\s*\(/, msg:"Tính tổng bằng `a.sum()`."},
+  {re:/\.mean\s*\(|np\.mean\s*\(|np\.average\s*\(/, msg:"Tính trung bình bằng `a.mean()`."}
+ ],
+ forbid:[
+  {re:/np\.arange\s*\(\s*1\s*,\s*10\s*\)/, msg:"`np.arange(1, 10)` chỉ đến 9. Muốn tới 10 phải là `np.arange(1, 11)`."}
+ ]},
+
+{id:"np3", topic:"np", level:1, title:"Ma trận toàn số 1 nhân 5",
+ desc:"Tạo ma trận 3×3 toàn số 1, nhân với 5 rồi in ra.",
+ starter:T(`
+import numpy as np
+
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+m = np.ones((3, 3)) * 5
+print(m)
+`),
+ expected:"[[5. 5. 5.]\n [5. 5. 5.]\n [5. 5. 5.]]",
+ hint:"np.ones((3, 3)) — chú ý cặp ngoặc tuple. Sau đó nhân với 5 (áp dụng cho mọi phần tử).",
+ explain:"Kích thước phải là một tuple (3, 3). Phép nhân với số vô hướng áp dụng cho từng phần tử.",
+ must:[
+  {re:/np\.ones\s*\(\s*\(\s*3\s*,\s*3\s*\)\s*\)|np\.full\s*\(\s*\(\s*3\s*,\s*3\s*\)\s*,\s*5|np\.ones\s*\(\s*shape\s*=/, msg:"Tạo ma trận bằng `np.ones((3, 3))`."},
+  {re:/\*\s*5|5\s*\*|np\.full|np\.multiply/, msg:"Cần nhân ma trận với 5."}
+ ],
+ forbid:[
+  {re:/np\.(ones|zeros)\s*\(\s*\d+\s*,\s*\d+\s*\)/, msg:"`np.ones(3, 3)` sai: tham số thứ hai là `dtype`. Phải là `np.ones((3, 3))` — có cặp ngoặc tuple."}
+ ]},
+
+{id:"np4", topic:"np", level:2, title:"Lấy một hàng của ma trận",
+ desc:"Cho <code>a = np.arange(12).reshape(3, 4)</code>. In ra hàng thứ hai của a.",
+ starter:T(`
+import numpy as np
+
+a = np.arange(12).reshape(3, 4)
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+a = np.arange(12).reshape(3, 4)
+print(a[1])
+`),
+ expected:"[4 5 6 7]",
+ hint:"Chỉ số bắt đầu từ 0, nên hàng thứ hai là a[1].",
+ explain:"a[i] lấy cả hàng i. a[:, j] lấy cả cột j. Chỉ số luôn bắt đầu từ 0.",
+ must:[
+  {re:/\ba\s*\[\s*1\s*(,\s*:\s*)?\]/, msg:"Hàng thứ hai có chỉ số 1 (đếm từ 0): `a[1]` hoặc `a[1, :]`."}
+ ],
+ forbid:[
+  {re:/\ba\s*\[\s*2\s*\]/, msg:"`a[2]` là hàng thứ BA. Chỉ số bắt đầu từ 0 nên hàng thứ hai là `a[1]`."},
+  {re:/\ba\s*\[\s*:\s*,\s*1\s*\]/, msg:"`a[:, 1]` là CỘT thứ hai. Muốn lấy hàng, đặt chỉ số ở vị trí đầu: `a[1]` hoặc `a[1, :]`."}
+ ]},
+
+{id:"np5", topic:"np", level:2, title:"Lọc phần tử bằng mặt nạ boolean",
+ desc:"Cho <code>a = np.array([5, 12, 7, 20, 3, 18])</code>. In ra các phần tử lớn hơn 10.",
+ starter:T(`
+import numpy as np
+
+a = np.array([5, 12, 7, 20, 3, 18])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+a = np.array([5, 12, 7, 20, 3, 18])
+print(a[a > 10])
+`),
+ expected:"[12 20 18]",
+ hint:"a > 10 cho mảng True/False (mặt nạ). Đưa nó vào chỉ mục: a[a > 10].",
+ explain:"Boolean indexing giữ lại các phần tử ứng với True. Kết hợp nhiều điều kiện dùng & và | (có ngoặc), không dùng and/or.",
+ must:[
+  {re:/\ba\s*\[\s*a\s*>\s*10\s*\]|np\.where|np\.extract|np\.compress/, msg:"Lọc bằng mặt nạ boolean: `a[a > 10]`."}
+ ],
+ forbid:[
+  {re:/\bif\s+a\s*>\s*10/, msg:"`if a > 10` gây `ValueError` (mảng có nhiều phần tử). Dùng mặt nạ `a[a > 10]`."},
+  {re:/\[[^\]]*\b(and|or)\b[^\]]*\]/, msg:"Với mảng NumPy dùng `&` và `|` (kèm ngoặc), không dùng `and`/`or`."}
+ ]},
+
+{id:"np6", topic:"np", level:2, title:"Trừ trung bình từng cột",
+ desc:"Cho ma trận <code>A</code> 3×3. Trừ mỗi cột cho giá trị trung bình của chính cột đó và in kết quả.",
+ starter:T(`
+import numpy as np
+
+A = np.array([[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9]])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+A = np.array([[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9]])
+B = A - A.mean(axis=0)
+print(B)
+`),
+ expected:"[[-3. -3. -3.]\n [ 0.  0.  0.]\n [ 3.  3.  3.]]",
+ hint:"A.mean(axis=0) cho trung bình từng cột (shape (3,)); trừ trực tiếp nhờ broadcasting.",
+ explain:"axis=0 thu gọn theo chiều hàng → mỗi cột còn một giá trị. Broadcasting tự \"kéo giãn\" vector (3,) cho khớp ma trận (3,3).",
+ must:[
+  {re:/mean\s*\([^)]*axis\s*=\s*0|mean\s*\(\s*0\s*\)/, msg:"Trung bình từng cột: `A.mean(axis=0)`."},
+  {re:/-/, msg:"Cần phép trừ giữa `A` và trung bình cột."}
+ ],
+ forbid:[
+  {re:/axis\s*=\s*1/, msg:"`axis=1` tính theo từng HÀNG. Muốn trung bình từng cột dùng `axis=0`."}
+ ]},
+
+{id:"np7", topic:"np", level:2, title:"Nhân hai ma trận",
+ desc:"Cho <code>A</code> và <code>B</code> là hai ma trận 2×2. Tính tích ma trận A·B (theo đại số tuyến tính) và in ra.",
+ starter:T(`
+import numpy as np
+
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+print(A @ B)
+`),
+ expected:"[[19 22]\n [43 50]]",
+ hint:"Dùng toán tử @ (hoặc np.dot / np.matmul). Toán tử * chỉ nhân từng phần tử.",
+ explain:"A * B nhân từng phần tử tương ứng (Hadamard). Tích ma trận thật sự dùng @.",
+ must:[
+  {re:/@|np\.dot\s*\(|np\.matmul\s*\(|\.dot\s*\(/, msg:"Nhân ma trận bằng `A @ B` hoặc `np.dot(A, B)`."}
+ ],
+ forbid:[
+  {re:/\bA\s*\*\s*B\b/, msg:"`A * B` nhân TỪNG PHẦN TỬ, không phải nhân ma trận. Dùng `A @ B` hoặc `np.dot(A, B)`."}
+ ]},
+
+{id:"np8", topic:"np", level:2, title:"Điểm trung bình từng sinh viên",
+ desc:"Mỗi hàng của <code>D</code> là điểm 4 môn của một sinh viên. In điểm trung bình của từng sinh viên.",
+ starter:T(`
+import numpy as np
+
+D = np.array([[7, 8, 9, 6],
+              [5, 6, 7, 8],
+              [9, 9, 8, 10]])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+D = np.array([[7, 8, 9, 6],
+              [5, 6, 7, 8],
+              [9, 9, 8, 10]])
+print(D.mean(axis=1))
+`),
+ expected:"[7.5 6.5 9. ]",
+ hint:"Muốn mỗi hàng ra một giá trị, ta thu gọn chiều cột → axis=1.",
+ explain:"axis=k nghĩa là chiều thứ k bị thu gọn. shape (3,4) với axis=1 → còn (3,).",
+ must:[
+  {re:/mean\s*\([^)]*axis\s*=\s*1|mean\s*\(\s*1\s*\)|np\.average\s*\([^)]*axis\s*=\s*1/, msg:"Trung bình từng hàng: `D.mean(axis=1)`."}
+ ],
+ forbid:[
+  {re:/axis\s*=\s*0/, msg:"`axis=0` cho trung bình từng CỘT (theo môn). Điểm của từng sinh viên là từng HÀNG → `axis=1`."}
+ ]},
+
+{id:"np9", topic:"np", level:3, title:"Chuẩn hoá min–max",
+ desc:"Cho <code>x = np.array([2, 4, 6, 8, 10])</code>. Đưa các giá trị về đoạn [0, 1] theo công thức (x − min) / (max − min) và in kết quả.",
+ starter:T(`
+import numpy as np
+
+x = np.array([2, 4, 6, 8, 10])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+x = np.array([2, 4, 6, 8, 10])
+y = (x - x.min()) / (x.max() - x.min())
+print(y)
+`),
+ expected:"[0.   0.25 0.5  0.75 1.  ]",
+ hint:"(x - x.min()) / (x.max() - x.min()) — nhớ ngoặc quanh mẫu số.",
+ explain:"Trừ min, chia cho khoảng giá trị (max − min). Cả hai bước áp dụng cho toàn mảng nhờ vector hoá, không cần vòng lặp.",
+ must:[
+  {re:/\.min\s*\(|np\.min\s*\(|np\.amin\s*\(/, msg:"Cần dùng giá trị nhỏ nhất `x.min()`."},
+  {re:/\.max\s*\(|np\.max\s*\(|np\.amax\s*\(/, msg:"Cần dùng giá trị lớn nhất `x.max()`."},
+  {re:/\//, msg:"Cần phép chia cho (max − min)."}
+ ],
+ forbid:[
+  {re:/\/\s*(x\.max\s*\(\s*\)|np\.max\s*\(\s*x\s*\))\s*-/, msg:"Thiếu ngoặc quanh mẫu số: phải `/ (x.max() - x.min())`, nếu không phép chia được tính trước phép trừ."},
+  {re:/\bfor\b/, msg:"Không cần vòng lặp: NumPy tính trên cả mảng cùng lúc (vector hoá)."}
+ ]},
+
+{id:"np10", topic:"np", level:3, title:"Đếm phần tử dương theo từng hàng",
+ desc:"Cho ma trận <code>M</code>. Với mỗi hàng, đếm xem có bao nhiêu phần tử lớn hơn 0 và in kết quả.",
+ starter:T(`
+import numpy as np
+
+M = np.array([[ 1, -2,  3],
+              [-4,  5,  6],
+              [ 0, -1,  2]])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+M = np.array([[ 1, -2,  3],
+              [-4,  5,  6],
+              [ 0, -1,  2]])
+print((M > 0).sum(axis=1))
+`),
+ expected:"[2 2 1]",
+ hint:"(M > 0) cho mảng bool (True = 1). Cộng theo từng hàng bằng sum(axis=1).",
+ explain:"True được coi là 1 khi cộng, nên tổng của mảng bool chính là số phần tử thoả điều kiện.",
+ must:[
+  {re:/>\s*0/, msg:"Cần điều kiện `M > 0`."},
+  {re:/sum\s*\([^)]*axis\s*=\s*1|count_nonzero\s*\([^)]*axis\s*=\s*1/, msg:"Đếm theo từng hàng: `.sum(axis=1)` (hoặc `np.count_nonzero(..., axis=1)`)."}
+ ],
+ forbid:[
+  {re:/axis\s*=\s*0/, msg:"`axis=0` đếm theo từng CỘT. Đề bài hỏi theo từng HÀNG → `axis=1`."},
+  {re:/\bfor\b/, msg:"Không cần vòng lặp: dùng `(M > 0).sum(axis=1)`."}
+ ]},
+
+{id:"np11", topic:"np", level:3, title:"Khoảng cách Euclid",
+ desc:"Cho hai điểm <code>p = [1, 2, 3]</code> và <code>q = [4, 6, 3]</code> (dạng mảng NumPy). Tính khoảng cách Euclid giữa chúng và in ra.",
+ starter:T(`
+import numpy as np
+
+p = np.array([1, 2, 3])
+q = np.array([4, 6, 3])
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+p = np.array([1, 2, 3])
+q = np.array([4, 6, 3])
+print(np.sqrt(np.sum((p - q) ** 2)))
+`),
+ expected:"5.0",
+ hint:"Căn của tổng bình phương hiệu: np.sqrt(np.sum((p - q) ** 2)), hoặc np.linalg.norm(p - q).",
+ explain:"d = √Σ(pᵢ − qᵢ)². np.linalg.norm(p - q) làm đúng việc này trong một lệnh.",
+ must:[
+  {re:/np\.sqrt|linalg\.norm|\*\*\s*0?\.5|\*\*\s*\(\s*1\s*\/\s*2\s*\)/, msg:"Cần lấy căn: `np.sqrt(...)` hoặc `np.linalg.norm(p - q)`."},
+  {re:/-/, msg:"Cần hiệu `p - q`."}
+ ],
+ forbid:[
+  {re:/np\.sqrt\s*\(\s*p\s*-\s*q\s*\)\s*\*\*\s*2/, msg:"Sai thứ tự: `np.sqrt(p - q) ** 2` lấy căn từng hiệu trước. Phải bình phương, cộng lại rồi mới lấy căn."},
+  {re:/\bmath\.sqrt/, msg:"`math.sqrt` chỉ nhận số đơn, không nhận mảng. Dùng `np.sqrt`."}
+ ]},
+
+{id:"np12", topic:"np", level:3, title:"Dòng điện mạch vòng (hệ phương trình)",
+ desc:"Mạch hai vòng có R1 = 2 Ω, R2 = 4 Ω, R3 = 6 Ω, V = 12 V. Phương trình mạch vòng: <code>(R1+R2)·I1 − R2·I2 = V</code> và <code>−R2·I1 + (R2+R3)·I2 = 0</code>. Giải I1, I2 bằng NumPy và in ra.",
+ starter:T(`
+import numpy as np
+
+R1, R2, R3, V = 2, 4, 6, 12
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+R1, R2, R3, V = 2, 4, 6, 12
+A = np.array([[R1 + R2, -R2],
+              [-R2, R2 + R3]])
+b = np.array([V, 0])
+I = np.linalg.solve(A, b)
+print(I)
+`),
+ expected:"[2.72727273 1.09090909]",
+ hint:"Viết dạng A·I = b với A = [[R1+R2, -R2], [-R2, R2+R3]], b = [V, 0], rồi np.linalg.solve(A, b).",
+ explain:"Hệ phương trình tuyến tính A·x = b giải bằng np.linalg.solve(A, b) — chính xác và ổn định hơn tính nghịch đảo.",
+ must:[
+  {re:/np\.array\s*\(/, msg:"Cần tạo ma trận hệ số `A` và vector `b` bằng `np.array`."},
+  {re:/linalg\.solve|linalg\.inv|linalg\.lstsq/, msg:"Giải hệ bằng `np.linalg.solve(A, b)`."}
+ ],
+ forbid:[
+  {re:/\bA\s*\/\s*b\b|\bb\s*\/\s*A\b/, msg:"Không thể chia ma trận. Dùng `np.linalg.solve(A, b)`."},
+  {re:/linalg\.solve\s*\(\s*b\s*,\s*A/, msg:"Sai thứ tự tham số: `solve(A, b)` — ma trận hệ số trước, vế phải sau."},
+  {re:/A\s*\*\s*np\.linalg\.inv\s*\(\s*b/, msg:"Phải là `inv(A) @ b`, không phải `A * inv(b)`."}
+ ]},
+
+{id:"np13", topic:"np", level:3, title:"Trở kháng phức R–L",
+ desc:"Đoạn mạch R nối tiếp L có R = 10 Ω, L = 0,05 H, f = 50 Hz. Tính trở kháng phức <code>Z = R + jωL</code> (ω = 2πf). In ra |Z| và góc pha (đơn vị độ), mỗi số làm tròn 2 chữ số.",
+ starter:T(`
+import numpy as np
+
+R = 10      # Ω
+L = 0.05    # H
+f = 50      # Hz
+# Viết code ở đây
+`),
+ solution:T(`
+import numpy as np
+
+R = 10      # Ω
+L = 0.05    # H
+f = 50      # Hz
+w = 2 * np.pi * f
+Z = R + 1j * w * L
+print(round(abs(Z), 2), round(np.degrees(np.angle(Z)), 2))
+`),
+ expected:"18.62 57.52",
+ hint:"ω = 2πf; Z = R + 1j*ω*L; |Z| = abs(Z); góc = np.degrees(np.angle(Z)).",
+ explain:"Python dùng 1j làm đơn vị ảo. np.angle trả về radian nên cần np.degrees để đổi sang độ.",
+ must:[
+  {re:/\b1j\b|\bcomplex\s*\(/, msg:"Đơn vị ảo trong Python là `1j`."},
+  {re:/np\.pi/, msg:"Dùng `np.pi` để tính ω = 2πf."},
+  {re:/\babs\s*\(|np\.abs\s*\(|np\.absolute\s*\(|linalg\.norm|np\.hypot/, msg:"Độ lớn |Z| dùng `abs(Z)` hoặc `np.abs(Z)`."},
+  {re:/np\.angle|np\.arctan2?|np\.arctan/, msg:"Góc pha dùng `np.angle(Z)`."},
+  {re:/np\.degrees|np\.rad2deg|180\s*\/\s*np\.pi|\*\s*180|180\s*\*/, msg:"`np.angle` trả về radian — đổi sang độ bằng `np.degrees(...)`."},
+  {re:/\bround\s*\(|np\.round\s*\(|np\.around\s*\(|:\.2f/, msg:"Cần làm tròn 2 chữ số thập phân (`round(x, 2)`)."}
+ ],
+ forbid:[
+  {re:/\bR\s*\+\s*j\s*\*/, msg:"Trong Python, đơn vị ảo là `1j`. Chữ `j` đứng một mình chỉ là tên biến (chưa định nghĩa)."},
+  {re:/(^|[^.\w])pi\b/, unless:/from\s+(numpy|math)\s+import[^\n]*\bpi\b|\bpi\s*=/, msg:"`pi` chưa được định nghĩa. Dùng `np.pi`."}
+ ]}
+];
+
+/* ============ Trình kiểm tra code ============ */
+const NP_TOP = new Set(("array zeros ones empty full eye identity arange linspace logspace meshgrid zeros_like ones_like full_like empty_like copy asarray asanyarray ascontiguousarray frombuffer fromfunction fromiter diag diagonal tri tril triu vander reshape ravel flatten transpose swapaxes moveaxis rollaxis expand_dims squeeze concatenate stack vstack hstack dstack column_stack row_stack split array_split hsplit vsplit dsplit tile repeat append insert delete resize pad flip fliplr flipud rot90 roll sort argsort lexsort searchsorted partition argpartition unique in1d isin intersect1d union1d setdiff1d setxor1d where nonzero flatnonzero argwhere extract compress select choose take put place putmask sum prod cumsum cumprod nansum nanprod nancumsum nancumprod mean median average std var nanmean nanmedian nanstd nanvar min max amin amax ptp argmin argmax nanmin nanmax nanargmin nanargmax percentile quantile nanpercentile nanquantile histogram histogram2d histogramdd bincount digitize cov corrcoef correlate convolve add subtract multiply divide true_divide floor_divide mod remainder fmod power float_power negative positive absolute abs fabs sign sqrt cbrt square reciprocal exp exp2 expm1 log log2 log10 log1p sin cos tan arcsin arccos arctan arctan2 hypot sinh cosh tanh arcsinh arccosh arctanh degrees radians deg2rad rad2deg unwrap round around rint fix floor ceil trunc clip maximum minimum fmax fmin modf frexp ldexp dot vdot inner outer matmul tensordot einsum kron trace cross linalg fft random polynomial polyfit polyval poly1d roots polyadd polysub polymul polydiv polyder polyint interp trapz trapezoid gradient diff ediff1d isnan isinf isfinite isneginf isposinf isreal iscomplex isscalar isclose allclose array_equal array_equiv equal not_equal greater greater_equal less less_equal logical_and logical_or logical_not logical_xor any all bitwise_and bitwise_or bitwise_xor invert left_shift right_shift real imag conj conjugate angle iscomplexobj isrealobj complex128 complex64 float64 float32 float16 int8 int16 int32 int64 uint8 uint16 uint32 uint64 bool_ bool int_ float_ complex_ str_ object_ dtype ndarray matrix asmatrix mat pi e inf nan newaxis euler_gamma ndim shape size ndindex ndenumerate nditer count_nonzero cumulative_sum unravel_index ravel_multi_index tril_indices triu_indices diag_indices indices mgrid ogrid r_ c_ s_ index_exp printoptions set_printoptions get_printoptions seterr errstate finfo iinfo result_type promote_types can_cast issubdtype savetxt loadtxt genfromtxt save load savez fromstring tostring shares_memory may_share_memory atleast_1d atleast_2d atleast_3d broadcast broadcast_to broadcast_arrays ix_ nan_to_num real_if_close sinc heaviside gcd lcm signbit copysign nextafter spacing logaddexp logaddexp2 i0 kaiser hamming hanning bartlett blackman trim_zeros piecewise apply_along_axis apply_over_axes vectorize frompyfunc array_str array_repr array2string binary_repr base_repr isfortran iterable typename lib emath ma testing char rec ctypeslib version").split(" "));
+const NP_LINALG = new Set("inv det solve eig eigh eigvals eigvalsh norm svd qr cholesky lstsq matrix_rank pinv matrix_power slogdet cond multi_dot tensorinv tensorsolve trace cross diagonal outer matmul vecdot LinAlgError".split(" "));
+const NP_RANDOM = new Set("rand randn randint random random_sample seed choice shuffle permutation uniform normal binomial poisson exponential beta gamma standard_normal sample ranf default_rng RandomState multinomial get_state set_state bytes".split(" "));
+const BUILTINS = new Set("print len range sum min max sorted input int float str list dict set tuple enumerate zip abs round reversed isinstance type bool map filter any all open pow divmod chr ord bin hex oct id iter next slice format repr hash callable complex bytes super object staticmethod classmethod property vars dir help exit quit".split(" "));
+const KEYWORDS = new Set("if elif else while for in not and or return lambda def class with assert yield except try finally import from as is del global nonlocal raise pass break continue".split(" "));
+
+function lev(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let prev=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){
+    const cur=[i];
+    for(let j=1;j<=n;j++) cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    prev=cur;
+  }
+  return prev[n];
+}
+function nearest(name, set){
+  if(set.has(name)) return null;
+  const low=name.toLowerCase();
+  for(const x of set) if(x.toLowerCase()===low) return x;
+  const lim = name.length<=5 ? 1 : 2;
+  if(name.length<4) return null;
+  let best=null, bd=99;
+  for(const x of set){ const d=lev(low,x.toLowerCase()); if(d<bd){bd=d;best=x;} }
+  return bd<=lim ? best : null;
+}
+
+function scan(code){
+  const n=code.length; let i=0, line=1, str=null, strLine=0;
+  const clean=[], nocom=[], errors=[], stack=[];
+  const PAIR={")":"(","]":"[","}":"{"};
+  while(i<n){
+    const ch=code[i];
+    if(str){
+      if(ch==="\\" && str.length===1){
+        clean.push(" "); nocom.push(ch); i++;
+        if(i<n){ const c2=code[i]; clean.push(c2==="\n"?"\n":" "); nocom.push(c2); if(c2==="\n") line++; i++; }
+        continue;
+      }
+      if(code.startsWith(str,i)){ clean.push(str); nocom.push(str); i+=str.length; str=null; continue; }
+      if(ch==="\n"){
+        if(str.length===1){
+          errors.push({line:strLine,type:"SyntaxError",msg:"Chuỗi mở ở dòng "+strLine+" chưa có dấu nháy đóng."});
+          str=null; clean.push("\n"); nocom.push("\n"); line++; i++; continue;
+        }
+        line++;
+      }
+      clean.push(ch==="\n"?"\n":" "); nocom.push(ch); i++; continue;
+    }
+    if(ch==="#"){ while(i<n && code[i]!=="\n") i++; continue; }
+    if(ch==="\""||ch==="'"){
+      const tri=code.substr(i,3);
+      str = tri===ch+ch+ch ? tri : ch; strLine=line;
+      clean.push(str); nocom.push(str); i+=str.length; continue;
+    }
+    if(ch==="("||ch==="["||ch==="{") stack.push({ch,line});
+    else if(ch===")"||ch==="]"||ch==="}"){
+      const o=stack.pop();
+      if(!o) errors.push({line,type:"SyntaxError",msg:"Thừa dấu `"+ch+"` (không có dấu mở tương ứng)."});
+      else if(o.ch!==PAIR[ch]) errors.push({line,type:"SyntaxError",msg:"Dấu `"+o.ch+"` ở dòng "+o.line+" bị đóng nhầm bằng `"+ch+"`."});
+    }
+    if(ch==="\n") line++;
+    clean.push(ch); nocom.push(ch); i++;
+  }
+  if(str) errors.push({line:strLine,type:"SyntaxError",msg:"Chuỗi mở ở dòng "+strLine+" chưa có dấu nháy đóng."});
+  stack.forEach(o=>errors.push({line:o.line,type:"SyntaxError",msg:"Dấu `"+o.ch+"` chưa được đóng."}));
+  return {clean:clean.join(""), nocom:nocom.join(""), errors};
+}
+
+function statements(clean){
+  const L=clean.split("\n"), st=[]; let depth=0, cur=null;
+  L.forEach((l,i)=>{
+    const t=l.trim();
+    if(!cur){
+      if(!t) return;
+      cur={start:i+1,end:i+1,indent:(l.match(/^[ \t]*/)||[""])[0],parts:[]};
+    }
+    if(t){ cur.parts.push(t); cur.end=i+1; }
+    for(const c of l){
+      if("([{".includes(c)) depth++; else if(")]}".includes(c)) depth=Math.max(0,depth-1);
+    }
+    if(!(depth>0 || /\\\s*$/.test(l))){
+      cur.text=cur.parts.join(" ").replace(/\\\s*$/,"");
+      st.push(cur); cur=null;
+    }
+  });
+  if(cur){ cur.text=cur.parts.join(" "); st.push(cur); }
+  return st;
+}
+function topColon(text){
+  let d=0;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if("([{".includes(c)) d++; else if(")]}".includes(c)) d=Math.max(0,d-1);
+    else if(c===":" && d===0 && text[i+1]!=="=") return i;
+  }
+  return -1;
+}
+function topAssign(text){
+  let d=0;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if("([{".includes(c)) d++; else if(")]}".includes(c)) d=Math.max(0,d-1);
+    else if(c==="=" && d===0){
+      const p=text[i-1]||"", n=text[i+1]||"";
+      if(!"=!<>:".includes(p) && n!=="=") return true;
+    }
+  }
+  return false;
+}
+const width = s => { let w=0; for(const c of s) w += c==="\t"?4:1; return w; };
+
+function lint(sc, code){
+  const errs=[...sc.errors], clean=sc.clean, lines=clean.split("\n");
+  const add=(line,type,msg)=>errs.push({line,type,msg});
+  const sts=statements(clean);
+
+  /* Cấu trúc câu lệnh, thụt lề */
+  const stack=[0]; let prev=null;
+  sts.forEach(s=>{
+    const t=s.text, w=width(s.indent);
+    if(/ /.test(s.indent) && /\t/.test(s.indent)) add(s.start,"IndentationError","Dòng thụt lề trộn lẫn tab và dấu cách. Chỉ dùng 4 dấu cách.");
+    if(prev && prev.opener){
+      if(w<=stack[stack.length-1]) add(s.start,"IndentationError","Cần thụt lề vào sau dòng "+prev.end+" (kết thúc bằng `:`). Thân khối lệnh phải lùi vào 4 dấu cách.");
+      else stack.push(w);
+    } else if(w>stack[stack.length-1]){
+      add(s.start,"IndentationError","Thụt lề thừa: dòng này lùi vào nhưng không thuộc khối lệnh nào ở trên.");
+    } else {
+      while(stack.length>1 && stack[stack.length-1]>w) stack.pop();
+      if(stack[stack.length-1]!==w) add(s.start,"IndentationError","Mức thụt lề không khớp với bất kỳ khối lệnh nào phía trên.");
+    }
+    const kw=(t.match(/^(if|elif|else|for|while|def|class|try|except|finally|with)\b/)||[])[1];
+    const ci=topColon(t);
+    s.opener=false;
+    if(kw){
+      if(ci<0) add(s.end,"SyntaxError","Thiếu dấu `:` ở cuối dòng `"+kw+"`.");
+      else if(/:\s*$/.test(t)) s.opener=true;
+      if(kw==="else" && /^else\s+if\b/.test(t)) add(s.start,"SyntaxError","Python không có `else if`. Hãy viết `elif`.");
+      if(kw==="def" && !/^def\s+\w+\s*\(/.test(t)) add(s.start,"SyntaxError","`def` cần dạng `def ten_ham(tham_so):`.");
+      if((kw==="if"||kw==="elif"||kw==="while") && ci>0 && topAssign(t.slice(kw.length, ci)))
+        add(s.start,"SyntaxError","Trong điều kiện phải so sánh bằng `==`. Dấu `=` là phép gán.");
+      if(kw==="for" && ci>0 && !/^for\s+.+\s+in\s+.+/.test(t.slice(0,ci))) add(s.start,"SyntaxError","`for` cần dạng `for x in dãy:`.");
+    }
+    if(/^elseif\b/.test(t)) add(s.start,"SyntaxError","Python viết `elif`, không phải `elseif`.");
+    if(/^print\s+[^\s(=]/.test(t)) add(s.start,"SyntaxError","Python 3 cần ngoặc: `print(...)`.");
+    if(/(^|[^=!<>+\-*\/%&|^@:~])=\s*$/.test(t)) add(s.end,"SyntaxError","Thiếu giá trị ở vế phải sau dấu `=`.");
+    if(/^(var|let|const|function)\s/.test(t)) add(s.start,"SyntaxError","Đây không phải cú pháp Python. Chỉ cần viết `ten_bien = giá_trị`.");
+    prev=s;
+  });
+  if(prev && prev.opener) add(prev.end,"IndentationError","Khối lệnh sau dấu `:` đang trống. Cần ít nhất một lệnh thụt lề bên dưới.");
+
+  /* Kiểm tra từng dòng */
+  lines.forEach((l,i)=>{
+    const ln=i+1;
+    if(/&&|\|\|/.test(l)) add(ln,"SyntaxError","Python dùng `and` / `or` thay cho `&&` / `||`.");
+    if(/(^|[^\w!=<>])!(?!=)/.test(l)) add(ln,"SyntaxError","Python dùng `not` thay cho `!`.");
+    if(/\b(true|false)\b/.test(l)) add(ln,"NameError","Trong Python phải viết hoa: `True` / `False`.");
+    if(/\bnull\b/.test(l)) add(ln,"NameError","Python dùng `None`, không có `null`.");
+    if(/[A-Za-z_\)\]]\+\+\s*($|[;)\]])/.test(l)) add(ln,"SyntaxError","Python không có `++`. Dùng `x += 1`.");
+    if(/_{3,}/.test(l)) add(ln,"SyntaxError","Còn chỗ trống `___` chưa được điền.");
+  });
+
+  /* Import */
+  const hasNpImport=/import\s+numpy\s+as\s+np\b/.test(clean);
+  const firstNp=lines.findIndex(l=>/\bnp\s*\./.test(l));
+  if(firstNp>=0 && !hasNpImport){
+    if(/^\s*import\s+numpy\s*$/m.test(clean)) add(firstNp+1,"NameError","`np` chưa được định nghĩa: bạn đã `import numpy` nhưng chưa đặt tên `as np`. Viết `import numpy as np`.");
+    else add(firstNp+1,"NameError","`np` chưa được định nghĩa. Thêm `import numpy as np` ở đầu file.");
+  }
+  const firstNumpy=lines.findIndex(l=>/\bnumpy\s*\./.test(l));
+  if(firstNumpy>=0 && hasNpImport && !/^\s*import\s+numpy\s*$/m.test(clean)) add(firstNumpy+1,"NameError","`numpy` chưa được định nghĩa vì bạn đã đặt tên `np`. Viết `np.tên_hàm(...)`.");
+  const firstMath=lines.findIndex(l=>/\bmath\s*\./.test(l));
+  if(firstMath>=0 && !/import\s+math\b|from\s+math\s+import/.test(clean)) add(firstMath+1,"NameError","`math` chưa được import. Thêm `import math`.");
+
+  /* Gõ sai tên hàm NumPy */
+  lines.forEach((l,i)=>{
+    const re=/\bnp\.([A-Za-z_]\w*)(?:\.([A-Za-z_]\w*))?/g; let m;
+    while((m=re.exec(l))){
+      if((m[1]==="linalg"||m[1]==="random") && m[2]){
+        const sug=nearest(m[2], m[1]==="linalg"?NP_LINALG:NP_RANDOM);
+        if(sug) add(i+1,"AttributeError","`np."+m[1]+"."+m[2]+"` không tồn tại. Có phải bạn muốn viết `np."+m[1]+"."+sug+"`?");
+      } else {
+        const sug=nearest(m[1], NP_TOP);
+        if(sug) add(i+1,"AttributeError","`np."+m[1]+"` không tồn tại. Có phải bạn muốn viết `np."+sug+"`?");
+      }
+    }
+  });
+
+  /* Gõ sai tên hàm dựng sẵn / hàm chưa định nghĩa (chỉ bắt lỗi gần giống) */
+  const defined=new Set();
+  let m;
+  const reDef=/\bdef\s+(\w+)\s*\(([^)]*)\)/g;
+  while((m=reDef.exec(clean))){ defined.add(m[1]); m[2].split(",").forEach(p=>{const n=p.split("=")[0].replace(/[*\s]/g,""); if(n) defined.add(n);}); }
+  const reAsg=/([A-Za-z_][\w\s,]*?)\s*(?:[+\-*\/%@&|^]|\/\/|\*\*)?=(?!=)/g;
+  while((m=reAsg.exec(clean))) m[1].split(",").forEach(p=>{const n=p.trim(); if(/^\w+$/.test(n)) defined.add(n);});
+  const reFor=/\bfor\s+([\w\s,()]+?)\s+in\b/g;
+  while((m=reFor.exec(clean))) m[1].split(/[\s,()]+/).forEach(n=>{if(n) defined.add(n);});
+  const reImp=/\b(?:from\s+[\w.]+\s+)?import\s+([\w\s,.*]+)/g;
+  while((m=reImp.exec(clean))) m[1].split(/[\s,]+/).forEach(n=>{if(n) defined.add(n);});
+  const reAs=/\bas\s+(\w+)/g;
+  while((m=reAs.exec(clean))) defined.add(m[1]);
+  const reLam=/\blambda\s+([\w\s,]*):/g;
+  while((m=reLam.exec(clean))) m[1].split(",").forEach(n=>{n=n.trim(); if(n) defined.add(n);});
+  const builtinArr=[...BUILTINS];
+  lines.forEach((l,i)=>{
+    const re=/(^|[^.\w])([A-Za-z_]\w*)\s*\(/g; let mm;
+    while((mm=re.exec(l))){
+      const name=mm[2];
+      if(BUILTINS.has(name)||KEYWORDS.has(name)||defined.has(name)||name.length<3) continue;
+      const low=name.toLowerCase(); let best=null, bd=99;
+      builtinArr.forEach(b=>{ if(b.length<3) return; const d=lev(low,b); if(d<bd){bd=d;best=b;} });
+      if(best && bd<=(name.length<=4?1:2)) add(i+1,"NameError","`"+name+"` chưa được định nghĩa. Có phải bạn muốn viết `"+best+"`?");
+    }
+  });
+
+  /* Loại trùng, sắp xếp */
+  const seen=new Set();
+  return errs.filter(e=>{const k=e.line+"|"+e.msg; if(seen.has(k)) return false; seen.add(k); return true;})
+             .sort((a,b)=>a.line-b.line);
+}
+
+function check(p, code){
+  if(!code.trim() || norm(code)===norm(p.starter)) return {status:"empty"};
+  const sc=scan(code);
+  const errs=lint(sc, code);
+  if(errs.length) return {status:"err", errs};
+  const src=sc.nocom, missing=[], bad=[];
+  if(p.expected && !/\bprint\s*\(/.test(src)) missing.push("Dùng `print()` để in kết quả ra màn hình.");
+  (p.must||[]).forEach(m=>{ if(!m.re.test(src)) missing.push(m.msg); });
+  (p.forbid||[]).forEach(f=>{ if(f.re.test(src) && !(f.unless && f.unless.test(src))) bad.push(f.msg); });
+  if(missing.length||bad.length) return {status:"wrong", missing, bad};
+  return {status:"ok", exact: norm(code)===norm(p.solution)};
+}
+
+/* ============ Kiến thức ============ */
+const K = [
+{topic:"py", title:"Biến & kiểu dữ liệu", blocks:[
+ {p:"Python tự nhận kiểu khi gán giá trị. Các kiểu cơ bản: <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, <code>None</code>."},
+ {c:T(`
+x = 10            # int
+y = 3.14          # float
+ten = "Hung"      # str
+ok = True         # bool (viết hoa chữ cái đầu)
+print(type(x))    # <class 'int'>
+n = int("42")     # ép kiểu: str -> int
+f = float("2.5")
+s = str(100)
+`)}]},
+{topic:"py", title:"Toán tử", blocks:[
+ {c:T(`
+7 + 2    # 9
+7 - 2    # 5
+7 * 2    # 14
+7 / 2    # 3.5   (chia luôn ra float)
+7 // 2   # 3     (chia lấy phần nguyên)
+7 % 2    # 1     (chia lấy dư)
+2 ** 10  # 1024  (luỹ thừa)
+3 == 3, 3 != 4, 3 < 5, 3 >= 3     # so sánh -> bool
+(a > 0) and (b > 0)               # and / or / not
+2 in [1, 2, 3]                    # True
+`)},
+ {p:"Dấu <code>=</code> là phép gán, <code>==</code> mới là so sánh bằng."}]},
+{topic:"py", title:"Chuỗi (str)", blocks:[
+ {c:T(`
+s = "Python NumPy"
+s[0]        # 'P'      (chỉ số bắt đầu từ 0)
+s[-1]       # 'y'      (âm = đếm từ cuối)
+s[0:6]      # 'Python' (lấy 0..5, không gồm 6)
+s[::-1]     # đảo ngược chuỗi
+s.lower(), s.upper(), s.strip()
+s.split(" ")            # ['Python', 'NumPy']
+"-".join(["a", "b"])    # 'a-b'
+s.replace("Py", "py")
+x = 3.14159
+f"Giá trị: {x:.2f}"     # 'Giá trị: 3.14'
+`)}]},
+{topic:"py", title:"List, tuple, set, dict", blocks:[
+ {c:T(`
+a = [3, 1, 2]
+a.append(5)        # [3, 1, 2, 5]
+a.insert(0, 9)     # chèn vào vị trí 0
+a.pop()            # bỏ và trả về phần tử cuối
+a.sort()           # sắp xếp tại chỗ
+len(a), sum(a), max(a), min(a)
+a[1:3]             # cắt list
+
+t = (1, 2, 3)      # tuple: không sửa được
+s = {1, 2, 2, 3}   # set: {1, 2, 3} - không trùng lặp
+
+d = {"ten": "An", "tuoi": 20}
+d["ten"]           # 'An'
+d["lop"] = "K65"   # thêm khoá mới
+d.get("xyz", 0)    # 0 (không lỗi nếu thiếu khoá)
+for k, v in d.items():
+    print(k, v)
+`)}]},
+{topic:"py", title:"Điều kiện & vòng lặp", blocks:[
+ {p:"Khối lệnh được xác định bằng <b>thụt lề 4 dấu cách</b> và dấu <code>:</code> ở cuối dòng."},
+ {c:T(`
+if diem >= 8:
+    print("Giỏi")
+elif diem >= 5:
+    print("Đạt")
+else:
+    print("Trượt")
+
+for i in range(5):        # 0, 1, 2, 3, 4
+    print(i)
+for i, v in enumerate(["a", "b"]):
+    print(i, v)           # 0 a / 1 b
+while n > 0:
+    n -= 1
+# break: thoát vòng lặp;  continue: bỏ qua lần lặp hiện tại
+
+binh_phuong = [x ** 2 for x in range(5)]        # list comprehension
+chan = [x for x in range(10) if x % 2 == 0]
+`)}]},
+{topic:"py", title:"Hàm", blocks:[
+ {c:T(`
+def tinh_tong(a, b=0):
+    return a + b
+
+tinh_tong(2, 3)       # 5
+tinh_tong(2)          # 2 (dùng giá trị mặc định)
+binh_phuong = lambda x: x ** 2
+def f(*args):         # nhận số đối số tuỳ ý
+    return sum(args)
+`)},
+ {p:"Hàm không có <code>return</code> sẽ trả về <code>None</code>. Đừng nhầm <code>print</code> (in ra) với <code>return</code> (trả giá trị)."}]},
+{topic:"py", title:"Lỗi thường gặp trong Python", blocks:[
+ {ul:[
+  "<b>SyntaxError</b>: thiếu <code>:</code> cuối dòng if/for/def, thiếu hoặc thừa ngoặc, dùng <code>=</code> trong điều kiện <code>if</code>.",
+  "<b>IndentationError</b>: thụt lề sai hoặc trộn tab với dấu cách.",
+  "<b>NameError</b>: dùng biến chưa gán, gõ sai tên, viết <code>true</code> thay vì <code>True</code>.",
+  "<b>TypeError</b>: cộng chuỗi với số: <code>\"Tuoi: \" + 20</code>. Sửa: <code>\"Tuoi: \" + str(20)</code>.",
+  "<b>IndexError</b>: chỉ số vượt phạm vi. List có 3 phần tử thì chỉ số hợp lệ là 0, 1, 2.",
+  "<b>KeyError</b>: truy cập khoá chưa có trong dict. Dùng <code>d.get(k)</code>.",
+  "<b>ZeroDivisionError</b>: chia cho 0. <b>ValueError</b>: <code>int(\"abc\")</code>."
+ ]}]},
+
+{topic:"np", title:"NumPy: tạo mảng", blocks:[
+ {c:T(`
+import numpy as np
+a = np.array([1, 2, 3])            # 1 chiều
+A = np.array([[1, 2], [3, 4]])     # 2 chiều
+np.zeros((2, 3))                   # ma trận 0, cỡ 2x3
+np.ones((2, 3))                    # ma trận 1
+np.full((2, 2), 7)                 # toàn số 7
+np.eye(3)                          # ma trận đơn vị 3x3
+np.arange(0, 10, 2)                # [0 2 4 6 8]   (không gồm 10)
+np.linspace(0, 1, 5)               # 5 điểm cách đều từ 0 đến 1 (gồm cả 1)
+`)},
+ {p:"Kích thước luôn truyền dạng <b>tuple</b>: <code>np.zeros((2, 3))</code>, không phải <code>np.zeros(2, 3)</code>."}]},
+{topic:"np", title:"NumPy: thuộc tính & kiểu dữ liệu", blocks:[
+ {c:T(`
+A = np.array([[1, 2, 3], [4, 5, 6]])
+A.shape     # (2, 3)   (số hàng, số cột)
+A.ndim      # 2        (số chiều)
+A.size      # 6        (tổng số phần tử)
+A.dtype     # int64
+A.astype(float)   # đổi kiểu sang float
+`)},
+ {p:"Mảng NumPy chỉ chứa một kiểu duy nhất. Trộn int và float thì tất cả thành float."}]},
+{topic:"np", title:"NumPy: chỉ mục & cắt lát", blocks:[
+ {c:T(`
+A = np.arange(12).reshape(3, 4)
+# [[ 0  1  2  3]
+#  [ 4  5  6  7]
+#  [ 8  9 10 11]]
+A[1, 2]      # 6            (hàng 1, cột 2)
+A[1]         # [4 5 6 7]    (cả hàng 1)
+A[:, 0]      # [0 4 8]      (cả cột 0)
+A[0:2, 1:3]  # [[1 2] [5 6]]
+A[::2]       # hàng 0 và 2
+A[A > 5]     # [ 6  7  8  9 10 11]   (boolean mask)
+A[(A > 2) & (A < 8)]   # kết hợp điều kiện: dùng & | ~ và có ngoặc
+`)},
+ {p:"Cắt lát trả về <b>view</b> (dùng chung dữ liệu): sửa view sẽ sửa mảng gốc. Dùng <code>.copy()</code> để tách riêng."}]},
+{topic:"np", title:"NumPy: reshape & ghép mảng", blocks:[
+ {c:T(`
+a = np.arange(6)
+a.reshape(2, 3)      # 2 hàng, 3 cột
+a.reshape(3, -1)     # -1: tự tính (3 hàng, 2 cột)
+A.T                  # chuyển vị
+A.flatten()          # trải thành 1 chiều
+np.concatenate([a, a])           # nối mảng 1 chiều
+np.vstack([A, A])                # xếp chồng theo chiều dọc
+np.hstack([A, A])                # nối theo chiều ngang
+a[:, np.newaxis]     # thêm trục -> cột (6, 1)
+`)}]},
+{topic:"np", title:"NumPy: phép toán & broadcasting", blocks:[
+ {c:T(`
+a = np.array([1, 2, 3])
+b = np.array([10, 20, 30])
+a + b       # [11 22 33]    (từng phần tử)
+a * b       # [10 40 90]    (KHÔNG phải nhân ma trận)
+a ** 2      # [1 4 9]
+a + 100     # [101 102 103] (broadcasting với số vô hướng)
+np.sqrt(a), np.exp(a), np.sin(a)     # hàm áp dụng từng phần tử
+
+A = np.ones((3, 3))
+A + np.array([1, 2, 3])   # cộng vector vào mỗi hàng
+`)},
+ {p:"<b>Quy tắc broadcasting</b>: so sánh shape từ phải sang trái. Hai chiều tương thích khi bằng nhau hoặc một trong hai bằng 1."}]},
+{topic:"np", title:"NumPy: thống kê & tham số axis", blocks:[
+ {c:T(`
+A = np.array([[1, 2, 3],
+              [4, 5, 6]])
+A.sum()          # 21
+A.sum(axis=0)    # [5 7 9]   -> mỗi CỘT một giá trị
+A.sum(axis=1)    # [ 6 15]   -> mỗi HÀNG một giá trị
+A.mean(), A.std(), A.min(), A.max()
+A.argmax()       # 5  (chỉ số của phần tử lớn nhất, mảng trải phẳng)
+np.cumsum(a)     # tổng tích luỹ
+`)},
+ {p:"<b>Mẹo nhớ</b>: <code>axis=k</code> nghĩa là \"chiều thứ k bị thu gọn\". shape (2, 3) với <code>axis=0</code> → còn (3,); với <code>axis=1</code> → còn (2,)."}]},
+{topic:"np", title:"NumPy: đại số tuyến tính", blocks:[
+ {c:T(`
+A = np.array([[2, 1], [1, 3]])
+b = np.array([5, 10])
+A @ A                      # nhân ma trận (= np.dot(A, A))
+A.T                        # chuyển vị
+np.linalg.det(A)           # định thức = 5.0
+np.linalg.inv(A)           # ma trận nghịch đảo
+np.linalg.solve(A, b)      # giải A x = b  -> [1. 3.]
+w, v = np.linalg.eig(A)    # trị riêng w, vector riêng v
+np.linalg.norm(b)          # độ dài (chuẩn 2) của vector
+`)}]},
+{topic:"np", title:"NumPy: ngẫu nhiên & tiện ích", blocks:[
+ {c:T(`
+np.random.seed(0)              # cố định kết quả ngẫu nhiên
+np.random.rand(2, 3)           # đều trên [0, 1)
+np.random.randn(3)             # phân phối chuẩn N(0, 1)
+np.random.randint(0, 10, 5)    # 5 số nguyên trong [0, 10)
+np.where(a > 2, 1, 0)          # điều kiện ? 1 : 0 theo từng phần tử
+np.sort(a), np.unique(a)
+np.round(3.14159, 2)           # 3.14
+np.clip(a, 0, 10)              # giới hạn giá trị trong [0, 10]
+np.allclose(x, y)              # so sánh số thực gần bằng nhau
+`)}]},
+{topic:"np", title:"NumPy cho kỹ thuật điện: số phức", blocks:[
+ {c:T(`
+R, L, f = 10, 0.05, 50
+w = 2 * np.pi * f
+Z = R + 1j * w * L          # trở kháng phức (1j là đơn vị ảo)
+abs(Z)                      # độ lớn |Z|
+np.angle(Z)                 # góc pha (radian)
+np.degrees(np.angle(Z))     # góc pha (độ)
+Z.real, Z.imag              # phần thực, phần ảo
+V = 220
+I = V / Z                   # dòng điện phức (phasor)
+`)}]},
+{topic:"np", title:"Lỗi thường gặp trong NumPy", blocks:[
+ {ul:[
+  "<b>NameError: name 'np' is not defined</b>: quên <code>import numpy as np</code>.",
+  "<b>ValueError: operands could not be broadcast together</b>: shape không tương thích. In <code>.shape</code> của từng mảng để kiểm tra.",
+  "<b>ValueError: cannot reshape array of size 12 into shape (5,3)</b>: tích các kích thước mới phải bằng <code>size</code>.",
+  "<b>ValueError: the truth value of an array ... is ambiguous</b>: dùng mảng trong <code>if</code> hoặc <code>and</code>/<code>or</code>. Dùng <code>.any()</code>, <code>.all()</code>, mặt nạ, và <code>&amp;</code> <code>|</code>.",
+  "<code>A * B</code> nhân từng phần tử, không phải nhân ma trận. Nhân ma trận: <code>A @ B</code>.",
+  "<code>np.zeros(3, 3)</code> sai. Đúng: <code>np.zeros((3, 3))</code>.",
+  "Mảng int bị cắt phần thập phân: <code>a = np.array([1, 2]); a[0] = 2.7</code> cho 2. Dùng <code>dtype=float</code>.",
+  "Cắt lát là view: <code>b = a[:2]; b[0] = 99</code> làm đổi cả <code>a</code>. Dùng <code>a[:2].copy()</code>.",
+  "Nhầm <code>axis</code>: axis=0 cho từng cột, axis=1 cho từng hàng."
+ ]}]}
+];
+
+/* ============ Lệnh hay dùng ============ */
+const C = [
+["py","print(x, sep=\" \", end=\"\\n\")","In ra màn hình","print(\"a\", \"b\", sep=\"-\")   # a-b"],
+["py","len(x)","Độ dài của list, chuỗi, dict...","len([1, 2, 3])   # 3"],
+["py","range(a, b, bước)","Dãy số nguyên từ a đến b - 1","list(range(0, 10, 2))   # [0, 2, 4, 6, 8]"],
+["py","type(x)","Kiểu dữ liệu của x","type(3.5)   # <class 'float'>"],
+["py","int() / float() / str()","Ép kiểu","int(\"12\")   # 12"],
+["py","input()","Nhập một chuỗi từ bàn phím","n = int(input())"],
+["py","abs(x) / round(x, k)","Trị tuyệt đối / làm tròn k chữ số","round(3.14159, 2)   # 3.14"],
+["py","sum(x) / min(x) / max(x)","Tổng / nhỏ nhất / lớn nhất","max([3, 9, 2])   # 9"],
+["py","sorted(x, key=..., reverse=...)","Trả về list đã sắp xếp","sorted(a, reverse=True)"],
+["py","enumerate(x)","Lấy cả chỉ số và giá trị","for i, v in enumerate(a):"],
+["py","zip(a, b)","Duyệt song song hai dãy","for x, y in zip(a, b):"],
+["py","lst.append(x)","Thêm x vào cuối list","a.append(5)"],
+["py","lst.pop(i)","Xoá và trả về phần tử ở vị trí i (mặc định cuối)","a.pop(0)"],
+["py","lst.sort()","Sắp xếp list tại chỗ","a.sort(reverse=True)"],
+["py","s.split(sep)","Tách chuỗi thành list","\"a,b\".split(\",\")   # ['a', 'b']"],
+["py","sep.join(list)","Nối list chuỗi thành một chuỗi","\"-\".join([\"a\", \"b\"])   # 'a-b'"],
+["py","s.strip() / lower() / upper() / replace()","Xử lý chuỗi","\" Ab \".strip().lower()   # 'ab'"],
+["py","f\"{x:.2f}\"","Định dạng số với 2 chữ số thập phân","f\"{3.14159:.2f}\"   # '3.14'"],
+["py","d.get(k, mặc_định)","Lấy giá trị theo khoá, không lỗi nếu thiếu","d.get(\"x\", 0)"],
+["py","d.items() / keys() / values()","Duyệt dict","for k, v in d.items():"],
+["py","[f(x) for x in a if cond]","List comprehension","[x ** 2 for x in a if x > 0]"],
+["py","lambda x: biểu_thức","Hàm ẩn danh ngắn gọn","sorted(a, key=lambda x: -x)"],
+["py","a[::-1]","Đảo ngược list / chuỗi","[1, 2, 3][::-1]   # [3, 2, 1]"],
+["py","// % **","Chia lấy nguyên / chia lấy dư / luỹ thừa","7 // 2, 7 % 2, 2 ** 3   # 3 1 8"],
+["py","isinstance(x, kiểu)","Kiểm tra kiểu dữ liệu","isinstance(5, int)   # True"],
+["py","try / except","Bắt lỗi khi chạy","try: int(s)\nexcept ValueError: print(\"Lỗi\")"],
+["np","import numpy as np","Nhập thư viện (bắt buộc dòng đầu)","import numpy as np"],
+["np","np.array([...])","Tạo mảng từ list","np.array([[1, 2], [3, 4]])"],
+["np","np.zeros((r, c)) / np.ones((r, c))","Ma trận toàn 0 / toàn 1","np.zeros((2, 3))"],
+["np","np.full((r, c), v) / np.eye(n)","Toàn giá trị v / ma trận đơn vị","np.eye(3)"],
+["np","np.arange(a, b, bước)","Dãy số như range (không gồm b)","np.arange(0, 10, 2)"],
+["np","np.linspace(a, b, n)","n điểm cách đều từ a đến b (gồm b)","np.linspace(0, 1, 5)"],
+["np","a.shape / a.ndim / a.size / a.dtype","Kích thước / số chiều / số phần tử / kiểu","a.shape   # (3, 4)"],
+["np","a.reshape(r, c)","Đổi hình dạng (-1 là tự tính)","np.arange(6).reshape(2, -1)"],
+["np","a.T","Chuyển vị","A.T"],
+["np","a.flatten()","Trải phẳng thành 1 chiều","A.flatten()"],
+["np","a[i, j] / a[:, j] / a[i, :]","Phần tử / cả cột j / cả hàng i","A[:, 0]"],
+["np","a[a > 5]","Lọc bằng mặt nạ boolean","a[(a > 2) & (a < 8)]"],
+["np","np.where(cond, x, y)","Chọn x nơi đúng, y nơi sai","np.where(a > 0, a, 0)"],
+["np","a.sum(axis=k) / mean / std","Tổng, trung bình, độ lệch chuẩn theo trục","A.sum(axis=0)   # theo cột"],
+["np","a.max() / a.min() / argmax() / argmin()","Lớn nhất, nhỏ nhất, chỉ số của chúng","a.argmax()"],
+["np","np.sqrt / np.exp / np.log / np.sin / np.cos","Hàm toán học áp dụng từng phần tử","np.sqrt(np.array([4, 9]))"],
+["np","A @ B  /  np.dot(A, B)","Nhân ma trận","A @ B"],
+["np","np.linalg.inv(A) / det(A)","Nghịch đảo / định thức","np.linalg.det(A)"],
+["np","np.linalg.solve(A, b)","Giải hệ A x = b","x = np.linalg.solve(A, b)"],
+["np","np.linalg.eig(A)","Trị riêng và vector riêng","w, v = np.linalg.eig(A)"],
+["np","np.linalg.norm(x)","Độ dài vector (chuẩn 2)","np.linalg.norm(p - q)"],
+["np","np.concatenate / np.vstack / np.hstack","Ghép mảng","np.vstack([A, B])"],
+["np","np.sort(a) / np.unique(a) / np.cumsum(a)","Sắp xếp / giá trị duy nhất / tổng tích luỹ","np.cumsum([1, 2, 3])   # [1 3 6]"],
+["np","np.random.seed(k)","Cố định số ngẫu nhiên","np.random.seed(0)"],
+["np","np.random.rand / randn / randint","Ngẫu nhiên đều / chuẩn / số nguyên","np.random.randint(0, 10, 5)"],
+["np","np.allclose(a, b)","So sánh số thực gần bằng nhau","np.allclose(0.1 + 0.2, 0.3)   # True"],
+["np","np.round(a, k) / np.clip(a, lo, hi)","Làm tròn / giới hạn giá trị","np.clip(a, 0, 10)"],
+["np","np.count_nonzero(cond)","Đếm số phần tử thoả điều kiện","np.count_nonzero(a > 0)"],
+["np","np.diff(a)","Hiệu giữa các phần tử liền kề","np.diff([1, 4, 9])   # [3 5]"],
+["np","a.astype(float)","Đổi kiểu dữ liệu","a.astype(float)"],
+["np","np.angle(z) / np.degrees(x) / np.pi","Góc pha / đổi rad → độ / số π","np.degrees(np.angle(3 + 4j))"],
+["np","1j  /  z.real  /  z.imag  /  abs(z)","Số phức: đơn vị ảo, phần thực, phần ảo, độ lớn","Z = 10 + 1j * 15"],
+["np","a[:, np.newaxis]","Thêm một trục mới","np.arange(3)[:, np.newaxis]   # shape (3, 1)"],
+["np","a.copy()","Sao chép độc lập (tránh view)","b = a[:2].copy()"]
+];
+
+/* ============ Trạng thái & lưu tiến độ ============ */
+const KEY="pynp_ontap_v1";
+function loadProg(){
+  try{ const r=localStorage.getItem(KEY); const o=r?JSON.parse(r):{}; return {solved:o.solved||{}, seen:o.seen||{}, drafts:o.drafts||{}}; }
+  catch(e){ return {solved:{},seen:{},drafts:{}}; }
+}
+function saveProg(){ try{ localStorage.setItem(KEY, JSON.stringify(prog)); }catch(e){} }
+let prog = loadProg();
+const S = {tab:"practice", topic:"all", level:"all", cur:null, kTopic:"all", cTopic:"all", cQ:""};
+const app = document.getElementById("app");
+
+function updateProgress(){
+  const done = P.filter(p=>prog.solved[p.id]).length;
+  const pct = Math.round(done*100/P.length);
+  document.getElementById("pt").textContent = "Đã giải "+done+"/"+P.length;
+  document.getElementById("pp").textContent = pct+"%";
+  document.getElementById("pb").style.width = pct+"%";
+}
+function chips(group, opts, cur){
+  return '<div class="chips">'+opts.map(o=>'<button class="chip'+(String(cur)===String(o[0])?' on':'')+'" data-g="'+group+'" data-v="'+o[0]+'">'+o[1]+'</button>').join("")+'</div>';
+}
+function bindChips(){
+  app.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{ S[b.dataset.g]=b.dataset.v; render(); }));
+}
+
+/* ============ Màn hình: danh sách bài ============ */
+function renderList(){
+  const items = P.filter(p=>(S.topic==="all"||p.topic===S.topic)&&(S.level==="all"||String(p.level)===String(S.level)));
+  app.innerHTML =
+   '<div class="wrap">'+
+   '<h2 class="h">Luyện tập theo dạng bài</h2>'+
+   '<p class="muted">Viết code trực tiếp, bấm <b>Kiểm tra</b> để nhận cảnh báo lỗi. Bí thì xem gợi ý, rồi mới xem đáp án.</p>'+
+   '<div class="lbl">Chủ đề</div>'+chips("topic",[["all","Tất cả"],["py","Python"],["np","NumPy"]],S.topic)+
+   '<div class="lbl">Mức độ</div>'+chips("level",[["all","Tất cả"],[1,"Dễ"],[2,"Trung bình"],[3,"Khó"]],S.level)+
+   '<div class="list">'+(items.map(p=>{
+      const done=prog.solved[p.id], seen=prog.seen[p.id];
+      return '<button class="row" data-open="'+p.id+'">'+
+        '<span class="pips p'+p.level+'" aria-label="'+LV[p.level]+'"><i></i><i></i><i></i></span>'+
+        '<span class="rt"><b>'+esc(p.title)+'</b><small>'+TP[p.topic]+' · '+LV[p.level]+'</small></span>'+
+        '<span class="st'+(done?' done':(seen?' seen':''))+'">'+(done?'✓':(seen?'👁':''))+'</span></button>';
+   }).join("")||'<p class="muted" style="padding:14px 2px">Không có bài phù hợp bộ lọc.</p>')+'</div>'+
+   '</div>';
+  bindChips();
+  app.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>{ S.cur=b.dataset.open; render(); window.scrollTo(0,0); }));
+}
+
+/* ============ Màn hình: một bài ============ */
+function resultHTML(r, p){
+  const box=(k,t,inner)=>'<div class="msg '+k+'"><h4>'+t+'</h4>'+inner+'</div>';
+  const ul=a=>'<ul>'+a.map(x=>'<li>'+x+'</li>').join("")+'</ul>';
+  if(r.status==="empty") return box("info","Bạn chưa viết code","<p style=\"margin:0\">Hãy viết lời giải vào khung phía trên, rồi bấm <b>Kiểm tra</b>.</p>");
+  if(r.status==="err") return box("err","Code có lỗi. Python sẽ báo lỗi khi chạy", ul(r.errs.slice(0,6).map(e=>'<span class="tag">'+e.type+'</span> dòng '+e.line+': '+msgHTML(e.msg))));
+  if(r.status==="wrong"){
+    const all=[...r.bad.map(msgHTML), ...r.missing.map(msgHTML)];
+    return box("warn","Không có lỗi cú pháp, nhưng chưa đúng yêu cầu", ul(all));
+  }
+  return box("ok","Chính xác!", '<p style="margin:0">'+(r.exact?"Code của bạn giống hệt đáp án mẫu.":"Code của bạn có đủ các thành phần cần thiết. Xem đáp án để so sánh cách làm khác.")+'</p>');
+}
+
+function renderDetail(){
+  const idx=P.findIndex(x=>x.id===S.cur), p=P[idx];
+  if(!p){ S.cur=null; return renderList(); }
+  const nxt=P[(idx+1)%P.length];
+  app.innerHTML =
+   '<div class="wrap">'+
+   '<div class="bar"><button class="ghost" id="back">‹ Danh sách</button><button class="ghost" id="next">Bài sau ›</button></div>'+
+   '<div class="meta"><span class="pips p'+p.level+'"><i></i><i></i><i></i></span><span>'+TP[p.topic]+' · '+LV[p.level]+' · bài '+(idx+1)+'/'+P.length+'</span></div>'+
+   '<h2 class="h">'+esc(p.title)+'</h2>'+
+   '<div class="desc">'+p.desc+'</div>'+
+   '<div class="exp"><span>Kết quả mong đợi khi chạy</span><pre>'+esc(p.expected)+'</pre></div>'+
+   '<div class="editor"><div class="gutter" id="gut"></div><textarea id="ed" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off" wrap="off" aria-label="Khung viết code"></textarea></div>'+
+   '<div class="actions"><button class="btn primary" id="run">▶ Kiểm tra code</button><button class="btn" id="hint">💡 Gợi ý</button><button class="btn" id="sol">👁 Đáp án</button><button class="btn" id="reset">↺ Làm lại</button></div>'+
+   '<div id="res"></div><div id="hintbox"></div><div id="solbox"></div>'+
+   '<p class="foot">Lưu ý: web kiểm tra bằng cách phân tích cấu trúc code (cú pháp, tên hàm, các thành phần bắt buộc), không chạy Python thật. Vì vậy hãy luôn so sánh thêm với đáp án mẫu.</p>'+
+   '</div>';
+
+  const ta=document.getElementById("ed"), gut=document.getElementById("gut"), res=document.getElementById("res");
+  let errLines=new Set();
+  ta.value = (prog.drafts[p.id]!==undefined) ? prog.drafts[p.id] : p.starter;
+
+  function refresh(){
+    const n=ta.value.split("\n").length;
+    let g=""; for(let i=1;i<=n;i++) g+='<span'+(errLines.has(i)?' class="e"':'')+'>'+i+'</span>';
+    gut.innerHTML=g;
+    ta.style.height="auto";
+    ta.style.height=Math.max(200, ta.scrollHeight)+"px";
+  }
+  refresh();
+  ta.addEventListener("input",()=>{
+    errLines=new Set(); refresh();
+    prog.drafts[p.id]=ta.value; saveProg();
+  });
+  ta.addEventListener("keydown",e=>{
+    if(e.key==="Tab"){
+      e.preventDefault(); ta.setRangeText("    ",ta.selectionStart,ta.selectionEnd,"end"); ta.dispatchEvent(new Event("input"));
+    } else if(e.key==="Enter"){
+      e.preventDefault();
+      const v=ta.value, pos=ta.selectionStart, ls=v.lastIndexOf("\n",pos-1)+1, line=v.slice(ls,pos);
+      let ind=(line.match(/^[ \t]*/)||[""])[0];
+      if(/:\s*$/.test(line)) ind+="    ";
+      ta.setRangeText("\n"+ind,pos,ta.selectionEnd,"end"); ta.dispatchEvent(new Event("input"));
+    }
+  });
+
+  document.getElementById("back").addEventListener("click",()=>{ S.cur=null; render(); window.scrollTo(0,0); });
+  document.getElementById("next").addEventListener("click",()=>{ S.cur=nxt.id; render(); window.scrollTo(0,0); });
+  document.getElementById("run").addEventListener("click",()=>{
+    const r=check(p, ta.value);
+    errLines = new Set(r.status==="err" ? r.errs.map(e=>e.line) : []);
+    refresh();
+    res.innerHTML=resultHTML(r,p);
+    if(r.status==="ok"){ prog.solved[p.id]=true; saveProg(); updateProgress(); }
+    res.scrollIntoView({behavior:"smooth",block:"nearest"});
+  });
+  document.getElementById("hint").addEventListener("click",()=>{
+    const hb=document.getElementById("hintbox");
+    hb.innerHTML = hb.innerHTML ? "" : '<div class="msg info"><h4>Gợi ý</h4><p style="margin:0">'+msgHTML(p.hint)+'</p></div>';
+  });
+  document.getElementById("sol").addEventListener("click",()=>{
+    const sb=document.getElementById("solbox");
+    if(sb.innerHTML){ sb.innerHTML=""; return; }
+    prog.seen[p.id]=true; saveProg();
+    sb.innerHTML='<div class="msg info"><h4>Đáp án mẫu</h4><pre class="code"><code>'+hl(p.solution)+'</code></pre><p style="margin:0">'+msgHTML(p.explain)+'</p></div>';
+    sb.scrollIntoView({behavior:"smooth",block:"nearest"});
+  });
+  document.getElementById("reset").addEventListener("click",()=>{
+    ta.value=p.starter; delete prog.drafts[p.id]; saveProg(); errLines=new Set(); refresh();
+    res.innerHTML=""; document.getElementById("hintbox").innerHTML=""; document.getElementById("solbox").innerHTML="";
+  });
+}
+
+/* ============ Màn hình: kiến thức ============ */
+function blockHTML(b){
+  if(b.p) return '<p>'+b.p+'</p>';
+  if(b.c) return '<pre class="code"><code>'+hl(b.c)+'</code></pre>';
+  if(b.ul) return '<ul>'+b.ul.map(x=>'<li>'+x+'</li>').join("")+'</ul>';
+  return "";
+}
+function renderLearn(){
+  const items=K.filter(k=>S.kTopic==="all"||k.topic===S.kTopic);
+  app.innerHTML =
+   '<div class="wrap"><h2 class="h">Kiến thức cần nhớ</h2>'+
+   '<p class="muted">Chạm vào từng mục để mở ra. Mỗi mục có ví dụ ngắn kèm chú thích kết quả.</p>'+
+   chips("kTopic",[["all","Tất cả"],["py","Python"],["np","NumPy"]],S.kTopic)+
+   '<div style="border-top:1px solid var(--border)">'+items.map(k=>
+     '<details class="sec"><summary>'+esc(k.title)+'<span class="tg">'+TP[k.topic]+'</span></summary><div class="sec-b">'+k.blocks.map(blockHTML).join("")+'</div></details>'
+   ).join("")+'</div></div>';
+  bindChips();
+}
+
+/* ============ Màn hình: lệnh hay dùng ============ */
+function renderCheat(){
+  app.innerHTML =
+   '<div class="wrap"><h2 class="h">Các lệnh hay dùng</h2>'+
+   '<p class="muted">Tra nhanh cú pháp. Gõ từ khoá để lọc, ví dụ <code>axis</code>, <code>sort</code>, <code>ma trận</code>.</p>'+
+   '<input class="search" id="q" type="search" placeholder="Tìm lệnh hoặc ý nghĩa..." autocomplete="off" autocapitalize="off" spellcheck="false">'+
+   chips("cTopic",[["all","Tất cả"],["py","Python"],["np","NumPy"]],S.cTopic)+
+   '<div class="count" id="cnt"></div><div id="cl" style="border-top:1px solid var(--border);margin-top:6px"></div></div>';
+  bindChips();
+  const q=document.getElementById("q"); q.value=S.cQ;
+  function fill(){
+    const s=S.cQ.trim().toLowerCase();
+    const rows=C.filter(r=>(S.cTopic==="all"||r[0]===S.cTopic)&&(!s||(r[1]+" "+r[2]+" "+r[3]).toLowerCase().includes(s)));
+    document.getElementById("cnt").textContent = rows.length+" lệnh";
+    document.getElementById("cl").innerHTML = rows.map(r=>
+      '<div class="ch"><div class="cmd"><code>'+esc(r[1])+'</code><span class="tg">'+TP[r[0]]+'</span></div><div class="mn">'+esc(r[2])+'</div><div class="ex">'+esc(r[3])+'</div></div>'
+    ).join("") || '<p class="muted" style="padding:14px 2px">Không tìm thấy lệnh phù hợp. Thử từ khoá khác.</p>';
+  }
+  q.addEventListener("input",()=>{ S.cQ=q.value; fill(); });
+  fill();
+}
+
+/* ============ Điều hướng chung ============ */
+function render(){
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===S.tab));
+  updateProgress();
+  if(S.tab==="practice") (S.cur?renderDetail():renderList());
+  else if(S.tab==="learn") renderLearn();
+  else renderCheat();
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  if(b.dataset.tab==="practice" && S.tab==="practice") S.cur=null;
+  S.tab=b.dataset.tab; render(); window.scrollTo(0,0);
+}));
+document.getElementById("theme").addEventListener("click",()=>{
+  const root=document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme==="dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  try{ localStorage.setItem(KEY+"_theme", root.dataset.theme); }catch(e){}
+});
+try{ const th=localStorage.getItem(KEY+"_theme"); if(th) document.documentElement.dataset.theme=th; }catch(e){}
+render();
+</script>
+</body>
+</html>
